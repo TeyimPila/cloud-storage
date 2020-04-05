@@ -81,7 +81,7 @@ public class CredentialController {
     }
 
     @PostMapping("/deleteCredential/{credentialId}")
-    public ModelAndView deleteFile(@PathVariable Integer credentialId) {
+    public ModelAndView deleteCredential(@PathVariable Integer credentialId) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("result");
 

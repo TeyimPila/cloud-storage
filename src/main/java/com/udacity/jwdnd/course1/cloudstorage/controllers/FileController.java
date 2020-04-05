@@ -58,7 +58,6 @@ public class FileController {
 
     @PostMapping("/deleteFile/{fileId}")
     public ModelAndView deleteFile(@PathVariable Integer fileId) {
-        // Load file from database
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("result");
 

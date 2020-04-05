@@ -73,8 +73,7 @@ public class NoteController {
     }
 
     @PostMapping("/deleteNote/{noteId}")
-    public ModelAndView deleteFile(@PathVariable Integer noteId) {
-        // Load file from database
+    public ModelAndView deleteNote(@PathVariable Integer noteId) {
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("result");
