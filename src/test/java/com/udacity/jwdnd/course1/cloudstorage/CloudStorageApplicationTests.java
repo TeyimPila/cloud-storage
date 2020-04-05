@@ -49,6 +49,37 @@ class CloudStorageApplicationTests {
         String signupUrl = "http://localhost:" + this.port + "/signup";
         String loginurl = "http://localhost:" + this.port + "/login";
 
+        registerUser(username, passwordVal);
+
+        driver.get(homeUrl);
+        String destination = driver.getCurrentUrl();
+        Assertions.assertNotEquals(homeUrl, destination);
+
+
+        driver.navigate().to(loginurl);
+
+        loginUser(username, passwordVal);
+
+        String currentUrl = driver.getCurrentUrl();
+        Assertions.assertEquals(currentUrl, homeUrl);
+
+        // After login, user can access home
+        driver.get(homeUrl);
+        destination = driver.getCurrentUrl();
+        Assertions.assertEquals(homeUrl, destination);
+
+        logoutUser();
+
+        driver.navigate().to(homeUrl);
+        destination = driver.getCurrentUrl();
+        Assertions.assertNotEquals(homeUrl, destination);
+
+    }
+
+    public void registerUser(String username, String passwordVal) {
+
+        String signupUrl = "http://localhost:" + this.port + "/signup";
+
         driver.get(signupUrl);
         WebElement companyName = driver.findElement(By.name("firstName"));
         companyName.sendKeys("FName");
@@ -65,39 +96,23 @@ class CloudStorageApplicationTests {
         WebElement signUp = driver.findElement(By.xpath("//button[text()='Register User']"));
         signUp.click();
 
-        driver.get(homeUrl);
-
-        String destination = driver.getCurrentUrl();
-
-        Assertions.assertNotEquals(homeUrl, destination);
+    }
 
 
-        driver.navigate().to(loginurl);
-
-        email = driver.findElement(By.name("username"));
+    public void loginUser(String username, String passwordVal) {
+        WebElement email = driver.findElement(By.name("username"));
         email.sendKeys(username);
 
-        password = driver.findElement(By.name("password"));
+        WebElement password = driver.findElement(By.name("password"));
         password.sendKeys(passwordVal);
 
         WebElement login = driver.findElement(By.xpath("//button[text()='Login']"));
         login.click();
+    }
 
-        String currentUrl = driver.getCurrentUrl();
-        Assertions.assertEquals(currentUrl, homeUrl);
-
-        // After login, user can access home
-		driver.get(homeUrl);
-		destination = driver.getCurrentUrl();
-		Assertions.assertEquals(homeUrl, destination);
-
-		WebElement logout = driver.findElement(By.xpath("//button[text()='Logout']"));
-		logout.click();
-
-		driver.navigate().to(homeUrl);
-		destination = driver.getCurrentUrl();
-		Assertions.assertNotEquals(homeUrl, destination);
-
+    void logoutUser() {
+        WebElement logout = driver.findElement(By.xpath("//button[text()='Logout']"));
+        logout.click();
     }
 
 }
