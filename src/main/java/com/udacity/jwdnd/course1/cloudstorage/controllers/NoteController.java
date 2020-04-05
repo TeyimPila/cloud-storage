@@ -38,10 +38,9 @@ public class NoteController {
                 note.setUser(currentUser);
                 note = noteService.createOrUpdate(note);
 
-                if (note != null) {
-                    modelAndView.addObject("alertClass", "alert-success");
-                    modelAndView.addObject("message", "Note created successfully");
-                }
+                modelAndView.addObject("alertClass", "alert-success");
+                modelAndView.addObject("message", "Note created successfully");
+
             }
         } catch (Exception e) {
             modelAndView.addObject("alertClass", "alert-danger");
