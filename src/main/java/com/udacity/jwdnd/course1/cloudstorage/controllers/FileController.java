@@ -11,10 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -45,15 +42,6 @@ public class FileController {
         return "redirect:/home";
     }
 
-//    @PostMapping("/uploadMultipleFiles")
-//    public ModelAndView uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
-//
-//        return Arrays.asList(files)
-//                .stream()
-//                .map(file -> uploadFile(file))
-//                .collect(Collectors.toList());
-//    }
-
     @GetMapping("/downloadFile/{fileId}")
     public ResponseEntity<Resource> downloadFile(@PathVariable Integer fileId) {
         // Load file from database
@@ -63,5 +51,13 @@ public class FileController {
                 .contentType(MediaType.parseMediaType(file.getContentType()))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFileName() + "\"")
                 .body(new ByteArrayResource(file.getFileData()));
+    }
+
+    @PostMapping("/deleteFile/{fileId}")
+    public String deleteFile(@PathVariable Integer fileId) {
+        // Load file from database
+        fileService.deleteFile(fileId);
+
+        return "redirect:/home";
     }
 }

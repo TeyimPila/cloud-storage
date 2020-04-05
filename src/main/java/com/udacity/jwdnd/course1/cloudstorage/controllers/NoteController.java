@@ -7,6 +7,8 @@ import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -48,24 +50,37 @@ public class NoteController {
         return "redirect:/home";
     }
 
-//    @PostMapping("/uploadMultipleFiles")
-//    public ModelAndView uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
-//
-//        return Arrays.asList(files)
-//                .stream()
-//                .map(file -> uploadFile(file))
-//                .collect(Collectors.toList());
-//    }
+    @PostMapping("/updateNote")
+    public String updateNote(@Valid Note note, BindingResult bindingResult) {
 
-//    @GetMapping("/downloadFile/{fileId}")
-//    public ResponseEntity<Resource> downloadFile(@PathVariable Integer fileId) {
-//        // Load file from database
-//        File file = fileService.getFile(fileId);
-//
-//        return ResponseEntity.ok()
-//                .contentType(MediaType.parseMediaType(file.getContentType()))
-//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFileName() + "\"")
-//                .body(new ByteArrayResource(file.getFileData()));
-//    }
+        System.out.println("The note update " + note.toString());
+        ModelAndView modelAndView = new ModelAndView();
+
+        try {
+
+            if (!bindingResult.hasErrors()) {
+
+                note = noteService.createOrUpdate(note);
+
+                if (note != null) {
+                    modelAndView.addObject("alertClass", "alert-success");
+                    modelAndView.addObject("message", "User has been registered successfully");
+                }
+            }
+        } catch (Exception e) {
+//            modelAndView.addObject("alertClass", "alert-danger");
+//            modelAndView.addObject("message", "Something went wrong");
+        }
+
+        return "redirect:/home";
+    }
+
+    @PostMapping("/deleteNote/{noteId}")
+    public String deleteFile(@PathVariable Integer noteId) {
+        // Load file from database
+        noteService.deleteNote(noteId);
+
+        return "redirect:/home";
+    }
 
 }

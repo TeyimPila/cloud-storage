@@ -66,4 +66,9 @@ public class FileService {
     public List<File> getUserFiles(User user) {
         return fileRepository.findByUser(user);
     }
+
+    public void deleteFile(Integer fileId) {
+        fileRepository.deleteFile(fileId);
+    }
+
 }

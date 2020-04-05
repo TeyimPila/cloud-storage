@@ -53,4 +53,8 @@ public class CredentialService {
         Integer id = credentialRepository.update(cred);
         return credentialRepository.find(id);
     }
+
+    public void deleteCredential(Integer credentialId) {
+        credentialRepository.deleteCredential(credentialId);
+    }
 }

@@ -2,6 +2,7 @@ package com.udacity.jwdnd.course1.cloudstorage.repositories;
 
 import com.udacity.jwdnd.course1.cloudstorage.models.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.models.User;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -24,4 +25,7 @@ public interface CredentialRepository {
 
     @Insert("UPDATE CREDENTIALS SET USERNAME=#{username}, KEY=#{key}, PASSWORD=#{password} WHERE CREDENTIALID=#{credentialId}")
     Integer update(Credential credential);
+
+    @Delete("DELETE FROM CREDENTIALS WHERE CREDENTIALID = #{credId}")
+    void deleteCredential(Integer credId);
 }

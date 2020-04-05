@@ -2,6 +2,7 @@ package com.udacity.jwdnd.course1.cloudstorage.repositories;
 
 import com.udacity.jwdnd.course1.cloudstorage.models.Note;
 import com.udacity.jwdnd.course1.cloudstorage.models.User;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -24,4 +25,7 @@ public interface NoteRepository {
 
     @Select("SELECT * FROM NOTES WHERE USERID = #{userId}")
     List<Note> findByUser(User user);
+
+    @Delete("DELETE FROM NOTES WHERE NOTEID = #{noteId}")
+    void deleteNote(Integer noteId);
 }

@@ -39,4 +39,8 @@ public class NoteService {
         Integer id = noteRepository.update(note);
         return noteRepository.find(id);
     }
+
+    public void deleteNote(Integer noteId) {
+        noteRepository.deleteNote(noteId);
+    }
 }

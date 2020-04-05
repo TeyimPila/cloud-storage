@@ -7,6 +7,8 @@ import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -50,6 +52,43 @@ public class CredentialController {
 //            modelAndView.addObject("alertClass", "alert-danger");
 //            modelAndView.addObject("message", "Something went wrong");
         }
+
+        return "redirect:/home";
+    }
+
+    @PostMapping("/updateCredential")
+    public String updateCredential(@Valid Credential credential, BindingResult bindingResult) {
+
+        System.out.println("The credential" + credential.toString());
+        ModelAndView modelAndView = new ModelAndView();
+
+        try {
+
+            credential.setKey(authService.getKey());
+
+            if (!bindingResult.hasErrors()) {
+                System.out.println("The credential z" + credential.toString());
+
+                credential = credentialService.createOrUpdate(credential);
+
+                if (credential != null) {
+                    modelAndView.addObject("alertClass", "alert-success");
+                    modelAndView.addObject("message", "User has been registered successfully");
+                }
+            }
+        } catch (Exception e) {
+            throw e;
+//            modelAndView.addObject("alertClass", "alert-danger");
+//            modelAndView.addObject("message", "Something went wrong");
+        }
+
+        return "redirect:/home";
+    }
+
+    @PostMapping("/deleteCredential/{credentialId}")
+    public String deleteFile(@PathVariable Integer credentialId) {
+        // Load file from database
+        credentialService.deleteCredential(credentialId);
 
         return "redirect:/home";
     }
