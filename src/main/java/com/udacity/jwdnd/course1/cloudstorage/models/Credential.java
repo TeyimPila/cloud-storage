@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
-@Component
 @Entity
 @Table(name = "CREDENTIALS")
 public class Credential {
