@@ -11,7 +11,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -26,20 +29,20 @@ public class FileController {
     private AuthService authService;
 
     @PostMapping("/uploadFile")
-    public String uploadFile(@RequestParam("file") MultipartFile file) {
+    public ModelAndView uploadFile(@RequestParam("file") MultipartFile file) {
 
         ModelAndView modelAndView = new ModelAndView();
-        User currentUser = authService.currentUser();
-        File newFile = fileService.storeFile(file, currentUser);
+        modelAndView.setViewName("result");
 
-        //TODO: handle error here and redirect to results page.
-//        if (newFile) {
-//
-//        }
-//        modelAndView.setViewName("home");
-//        modelAndView.addObject("file", newFile);
+        try {
+            User currentUser = authService.currentUser();
+            fileService.storeFile(file, currentUser);
+        } catch (Exception e) {
+            modelAndView.addObject("alertClass", "alert-danger");
+            modelAndView.addObject("message", "Something went wrong");
+        }
 
-        return "redirect:/home";
+        return modelAndView;
     }
 
     @GetMapping("/downloadFile/{fileId}")
@@ -54,10 +57,20 @@ public class FileController {
     }
 
     @PostMapping("/deleteFile/{fileId}")
-    public String deleteFile(@PathVariable Integer fileId) {
+    public ModelAndView deleteFile(@PathVariable Integer fileId) {
         // Load file from database
-        fileService.deleteFile(fileId);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("result");
 
-        return "redirect:/home";
+        try {
+            fileService.deleteFile(fileId);
+            modelAndView.addObject("alertClass", "alert-success");
+            modelAndView.addObject("message", "File deleted successfully");
+        } catch (Exception e) {
+            modelAndView.addObject("alertClass", "alert-danger");
+            modelAndView.addObject("message", "Something went wrong");
+        }
+
+        return modelAndView;
     }
 }

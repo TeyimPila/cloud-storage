@@ -1,11 +1,7 @@
 package com.udacity.jwdnd.course1.cloudstorage.models;
 
 
-import com.udacity.jwdnd.course1.cloudstorage.services.EncryptionService;
-import org.hibernate.service.spi.InjectService;
 import org.hibernate.validator.constraints.URL;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;

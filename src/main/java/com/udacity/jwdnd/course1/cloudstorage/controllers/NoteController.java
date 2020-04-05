@@ -7,7 +7,6 @@ import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,10 +23,12 @@ public class NoteController {
     private AuthService authService;
 
     @PostMapping("/saveNote")
-    public String createNote(@Valid Note note, BindingResult bindingResult) {
+    public ModelAndView createNote(@Valid Note note, BindingResult bindingResult) {
 
-        System.out.println("The note" + note.toString());
         ModelAndView modelAndView = new ModelAndView();
+
+        modelAndView.setViewName("result");
+        modelAndView.addObject("note", note);
 
         try {
             User currentUser = authService.currentUser();
@@ -39,48 +40,56 @@ public class NoteController {
 
                 if (note != null) {
                     modelAndView.addObject("alertClass", "alert-success");
-                    modelAndView.addObject("message", "User has been registered successfully");
+                    modelAndView.addObject("message", "Note created successfully");
                 }
             }
         } catch (Exception e) {
-//            modelAndView.addObject("alertClass", "alert-danger");
-//            modelAndView.addObject("message", "Something went wrong");
+            modelAndView.addObject("alertClass", "alert-danger");
+            modelAndView.addObject("message", "Something went wrong");
         }
 
-        return "redirect:/home";
+        return modelAndView;
     }
 
     @PostMapping("/updateNote")
-    public String updateNote(@Valid Note note, BindingResult bindingResult) {
+    public ModelAndView updateNote(@Valid Note note, BindingResult bindingResult) {
 
-        System.out.println("The note update " + note.toString());
         ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("result");
 
         try {
 
             if (!bindingResult.hasErrors()) {
+                noteService.createOrUpdate(note);
 
-                note = noteService.createOrUpdate(note);
-
-                if (note != null) {
-                    modelAndView.addObject("alertClass", "alert-success");
-                    modelAndView.addObject("message", "User has been registered successfully");
-                }
+                modelAndView.addObject("alertClass", "alert-success");
+                modelAndView.addObject("message", "Note updated successfully");
             }
         } catch (Exception e) {
-//            modelAndView.addObject("alertClass", "alert-danger");
-//            modelAndView.addObject("message", "Something went wrong");
+            modelAndView.addObject("alertClass", "alert-danger");
+            modelAndView.addObject("message", "Something went wrong");
         }
 
-        return "redirect:/home";
+        return modelAndView;
     }
 
     @PostMapping("/deleteNote/{noteId}")
-    public String deleteFile(@PathVariable Integer noteId) {
+    public ModelAndView deleteFile(@PathVariable Integer noteId) {
         // Load file from database
-        noteService.deleteNote(noteId);
 
-        return "redirect:/home";
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("result");
+
+        try {
+            noteService.deleteNote(noteId);
+            modelAndView.addObject("alertClass", "alert-success");
+            modelAndView.addObject("message", "Note deleted successfully");
+        } catch (Exception e) {
+            modelAndView.addObject("alertClass", "alert-danger");
+            modelAndView.addObject("message", "Something went wrong");
+        }
+
+        return modelAndView;
     }
 
 }

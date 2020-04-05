@@ -7,13 +7,11 @@ import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.UUID;
 
 @Controller
 public class CredentialController {
@@ -25,71 +23,77 @@ public class CredentialController {
     private AuthService authService;
 
     @PostMapping("/saveCredential")
-    public String createCredential(@Valid Credential credential, BindingResult bindingResult) {
-
-        System.out.println("The credential" + credential.toString());
+    public ModelAndView createCredential(@Valid Credential credential, BindingResult bindingResult) {
 
         ModelAndView modelAndView = new ModelAndView();
+
+        modelAndView.setViewName("result");
+        modelAndView.addObject("credential", credential);
 
         try {
 
             credential.setKey(authService.getKey());
 
             if (!bindingResult.hasErrors()) {
-                System.out.println("The credential z" + credential.toString());
                 User currentUser = authService.currentUser();
 
                 credential.setUser(currentUser);
                 credential = credentialService.createOrUpdate(credential);
 
-                if (credential != null) {
-                    modelAndView.addObject("alertClass", "alert-success");
-                    modelAndView.addObject("message", "User has been registered successfully");
-                }
+                modelAndView.addObject("alertClass", "alert-success");
+                modelAndView.addObject("message", "Credential saved successfully");
+
             }
         } catch (Exception e) {
-            throw e;
-//            modelAndView.addObject("alertClass", "alert-danger");
-//            modelAndView.addObject("message", "Something went wrong");
+            modelAndView.addObject("alertClass", "alert-danger");
+            modelAndView.addObject("message", "Something went wrong");
         }
 
-        return "redirect:/home";
+        return modelAndView;
     }
 
     @PostMapping("/updateCredential")
-    public String updateCredential(@Valid Credential credential, BindingResult bindingResult) {
+    public ModelAndView updateCredential(@Valid Credential credential, BindingResult bindingResult) {
 
-        System.out.println("The credential" + credential.toString());
         ModelAndView modelAndView = new ModelAndView();
+
+        modelAndView.setViewName("result");
+        modelAndView.addObject("credential", credential);
 
         try {
 
             credential.setKey(authService.getKey());
 
             if (!bindingResult.hasErrors()) {
-                System.out.println("The credential z" + credential.toString());
 
                 credential = credentialService.createOrUpdate(credential);
 
-                if (credential != null) {
-                    modelAndView.addObject("alertClass", "alert-success");
-                    modelAndView.addObject("message", "User has been registered successfully");
-                }
+                modelAndView.addObject("alertClass", "alert-success");
+                modelAndView.addObject("message", "Credentials updated successfully");
+
             }
         } catch (Exception e) {
-            throw e;
-//            modelAndView.addObject("alertClass", "alert-danger");
-//            modelAndView.addObject("message", "Something went wrong");
+            modelAndView.addObject("alertClass", "alert-danger");
+            modelAndView.addObject("message", "Something went wrong");
         }
 
-        return "redirect:/home";
+        return modelAndView;
     }
 
     @PostMapping("/deleteCredential/{credentialId}")
-    public String deleteFile(@PathVariable Integer credentialId) {
-        // Load file from database
-        credentialService.deleteCredential(credentialId);
+    public ModelAndView deleteFile(@PathVariable Integer credentialId) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("result");
 
-        return "redirect:/home";
+        try {
+            credentialService.deleteCredential(credentialId);
+            modelAndView.addObject("alertClass", "alert-success");
+            modelAndView.addObject("message", "Credentials deleted successfully");
+        } catch (Exception e) {
+            modelAndView.addObject("alertClass", "alert-danger");
+            modelAndView.addObject("message", "Something went wrong");
+        }
+
+        return modelAndView;
     }
 }

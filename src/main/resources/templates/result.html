@@ -1,28 +1,59 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/bootstrap.min.css}">
 
-        <title>Result</title>
-    </head>
-    <body class="p-3 mb-2 bg-light text-black">
-        <div class="container justify-content-center w-50 p-3" style="margin-top: 5em;">
-            <div class="alert alert-success fill-parent">
-                <h1 class="display-5">Success</h1>
-                <span>Your changes were successfully saved. Click <a>here</a> to continue.</span>
-            </div>
+    <title>Result</title>
+</head>
+<body class="p-3 mb-2 bg-light text-black">
+<div class="container justify-content-center w-50 p-3" style="margin-top: 5em;">
+    <div th:class="${'alert ' + alertClass +  ' fill-parent'}">
+        <h1 class="display-5" th:text="${alertClass == 'alert-danger' ? 'Error': 'Success'}"></h1>
+        <span th:text="${message}"></span>
+    </div>
+
+    <div th:if="${note}" th:object="${note}">
+        <div th:if="${#fields.hasAnyErrors()}">
             <div class="alert alert-danger fill-parent">
-                <h1 class="display-5">Error</h1>
-                <span>Your changes were not saved. Click <a>here</a> to continue.</span>
-            </div>
-            <div class="alert alert-danger fill-parent">
-                <h1 class="display-5">Error</h1>
-                <span>Example Error Message</span>
-                <span>Click <a>here</a> to continue.</span>
+                <h1 class="display-5">Errors</h1>
+                <ul>
+                    <li th:if="${#fields.hasErrors('noteTitle')}" th:errors="*{noteTitle}"
+                        class="text text-danger"></li>
+                    <li th:if="${#fields.hasErrors('noteDescription')}" th:errors="*{noteDescription}"
+                        class="text text-danger"></li>
+                </ul>
             </div>
         </div>
-    </body>
+    </div>
+
+    <div th:if="${credential}" th:object="${credential}">
+        <div th:if="${#fields.hasAnyErrors()}">
+            <div class="alert alert-danger fill-parent">
+                <h1 class="display-5">Errors</h1>
+                <ul>
+                    <li th:if="${#fields.hasErrors('url')}"
+                        th:errors="*{url}"
+                        class="text text-danger">
+                    </li>
+                    <li th:if="${#fields.hasErrors('username')}"
+                        th:errors="*{username}"
+                        class="text text-danger">
+                    </li>
+                    <li th:if="${#fields.hasErrors('password')}"
+                        th:errors="*{password}"
+                        class="text text-danger">
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+    <div>
+        <span>Click <a th:href="@{/home}">here</a> to continue.</span>
+    </div>
+</div>
+</body>
 </html>

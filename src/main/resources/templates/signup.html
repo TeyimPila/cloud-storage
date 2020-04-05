@@ -15,7 +15,7 @@
     </div>
 
     <h1 class="display-5">Sign Up</h1>
-    <form autocomplete="on" action="#" th:action="@{/registration}"
+    <form autocomplete="off" action="#" th:action="@{/registration}"
           th:object="${user}" method="post" class="form-horizontal"
           role="form">
         <div th:class="${'alert ' + alertClass}" th:if="${message}">

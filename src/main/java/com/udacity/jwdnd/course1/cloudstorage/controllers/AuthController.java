@@ -64,7 +64,6 @@ public class AuthController {
 
             }
         } catch (Exception e) {
-            System.out.println("Here now 2 " + e.getMessage());
             modelAndView.addObject("alertClass", "alert-danger");
             modelAndView.addObject("message", "Something went wrong");
         }
