@@ -6,6 +6,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
@@ -46,7 +48,6 @@ class CloudStorageApplicationTests {
         String username = "user@gmail.com";
         String passwordVal = "Test@12345";
         String homeUrl = "http://localhost:" + this.port + "/home";
-        String signupUrl = "http://localhost:" + this.port + "/signup";
         String loginurl = "http://localhost:" + this.port + "/login";
 
         registerUser(username, passwordVal);
@@ -54,9 +55,6 @@ class CloudStorageApplicationTests {
         driver.get(homeUrl);
         String destination = driver.getCurrentUrl();
         Assertions.assertNotEquals(homeUrl, destination);
-
-
-        driver.navigate().to(loginurl);
 
         loginUser(username, passwordVal);
 
@@ -75,6 +73,51 @@ class CloudStorageApplicationTests {
         Assertions.assertNotEquals(homeUrl, destination);
 
     }
+
+    @Test
+    public void noteCreationTest() {
+
+        String username = "user@gmail.com";
+        String passwordVal = "Test@12345";
+        String homeUrl = "http://localhost:" + this.port + "/home";
+        String loginurl = "http://localhost:" + this.port + "/login";
+
+        registerUser(username, passwordVal);
+        loginUser(username, passwordVal);
+
+        Assertions.assertEquals(driver.getCurrentUrl(), homeUrl);
+
+        WebElement noteTab = driver.findElement(By.id("nav-notes-tab"));
+        noteTab.click();
+
+        WebElement newNoteButton = driver.findElement(By.id("new-note-button"));
+//
+
+        WebDriverWait wait = new WebDriverWait(driver, 100);
+
+        wait.until(ExpectedConditions.elementToBeClickable(newNoteButton)).click();
+//		newNoteButton.click();
+
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("noteTitle"))).sendKeys("Note 1");
+
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("noteDescription"))).sendKeys("Note Description");
+
+
+		WebElement saveNote = driver.findElement(By.id("save-note-button"));
+		saveNote.click();
+
+
+		driver.navigate().to(homeUrl);
+
+		noteTab = driver.findElement(By.id("nav-notes-tab"));
+		noteTab.click();
+
+		WebElement noteTitle = driver.findElement(By.xpath("//th[text()='Note 1']"));
+
+//		Assertions.assertEquals(noteTitle.getText(), "Note 1");
+
+    }
+
 
     public void registerUser(String username, String passwordVal) {
 
@@ -100,6 +143,9 @@ class CloudStorageApplicationTests {
 
 
     public void loginUser(String username, String passwordVal) {
+
+        driver.get("http://localhost:" + this.port + "/login");
+
         WebElement email = driver.findElement(By.name("username"));
         email.sendKeys(username);
 
