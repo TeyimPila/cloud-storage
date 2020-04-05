@@ -44,7 +44,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/signup").permitAll()
                 .antMatchers("/registration").permitAll()
                 .antMatchers("/h2-console/**").permitAll().anyRequest()
-                .authenticated().and().formLogin()
+                .authenticated().and().csrf().disable().formLogin()
                 .loginPage("/login").failureUrl("/login?error=true")
                 .defaultSuccessUrl("/home")
                 .usernameParameter("username")

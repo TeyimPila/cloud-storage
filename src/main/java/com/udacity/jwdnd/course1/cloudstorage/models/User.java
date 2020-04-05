@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.UniqueElements;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -30,11 +31,14 @@ public class User {
     private String lastName;
 
     @OneToMany(mappedBy = "user")
-    private Set<Credential> credentials;
+    private Set<Credential> credentials = new HashSet<>();;
+
+    @OneToMany(mappedBy = "user")
+    private Set<File> files = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(name = "USER_ROLES", joinColumns = @JoinColumn(name = "userid"), inverseJoinColumns = @JoinColumn(name = "roleid"))
-    private Set<Role> roles = new HashSet<>();;
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
@@ -123,5 +127,13 @@ public class User {
                 ", credentials=" + credentials +
                 ", roles=" + roles +
                 '}';
+    }
+
+    public Set<File> getFiles() {
+        return files;
+    }
+
+    public void setFiles(Set<File> files) {
+        this.files = files;
     }
 }

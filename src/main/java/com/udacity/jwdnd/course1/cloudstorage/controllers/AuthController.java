@@ -1,6 +1,7 @@
 package com.udacity.jwdnd.course1.cloudstorage.controllers;
 
 import com.udacity.jwdnd.course1.cloudstorage.models.User;
+import com.udacity.jwdnd.course1.cloudstorage.services.EncryptionService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -11,12 +12,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.crypto.Cipher;
 import javax.validation.Valid;
+import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
 
 @Controller
 public class AuthController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private EncryptionService encryptionService;
 
 
     @RequestMapping(value = {"/", "/login"}, method = RequestMethod.GET)
@@ -28,6 +34,7 @@ public class AuthController {
 
     @RequestMapping(value = "/signup", method = RequestMethod.GET)
     public ModelAndView registration() {
+
         ModelAndView modelAndView = new ModelAndView();
         User user = new User();
         modelAndView.addObject("user", user);
@@ -39,7 +46,6 @@ public class AuthController {
     public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult) {
 
         ModelAndView modelAndView = new ModelAndView();
-        System.out.println("Here now");
         try {
             User userExists = userService.findUserByUsername(user.getUsername());
             if (userExists != null) {
@@ -64,19 +70,6 @@ public class AuthController {
         }
 
         modelAndView.setViewName("signup");
-        return modelAndView;
-    }
-
-    @RequestMapping(value = "/home", method = RequestMethod.GET)
-    public ModelAndView home() {
-        ModelAndView modelAndView = new ModelAndView();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(auth.toString());
-
-        User user = userService.findUserByUsername(auth.getName());
-        modelAndView.addObject("userName", "Welcome " + user.getUsername() + "/" + user.getFirstName() + " " + user.getLastName() + " (" + user.getUsername() + ")");
-        modelAndView.addObject("adminMessage", "Content Available Only for Users with Admin Role");
-        modelAndView.setViewName("home");
         return modelAndView;
     }
 
