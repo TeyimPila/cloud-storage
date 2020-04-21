@@ -9,20 +9,23 @@ import com.udacity.jwdnd.course1.cloudstorage.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-import java.util.*;
+import java.util.Collection;
 
 @Service
 public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
+
+    private static Collection<? extends GrantedAuthority> getAuthorities(User user) {
+        String[] userRoles = (String[]) user.getRoles().stream().map(Role::getRole).toArray(String[]::new);
+        return AuthorityUtils.createAuthorityList(userRoles);
+    }
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
@@ -32,10 +35,5 @@ public class MyUserDetailsService implements UserDetailsService {
         }
 
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getAuthorities(user));
-    }
-
-    private static Collection<? extends GrantedAuthority> getAuthorities(User user) {
-        String[] userRoles = (String[]) user.getRoles().stream().map(Role::getRole).toArray(String[]::new);
-        return AuthorityUtils.createAuthorityList(userRoles);
     }
 }

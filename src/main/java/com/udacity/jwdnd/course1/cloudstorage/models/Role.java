@@ -3,7 +3,6 @@ package com.udacity.jwdnd.course1.cloudstorage.models;
 
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -14,13 +13,12 @@ public class Role {
     private Integer roleId;
 
     private String role;
+    //    @JoinTable(name = "USER_ROLES", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users = new HashSet<>();
 
     public Role() {
     }
-
-    @ManyToMany(mappedBy = "roles")
-//    @JoinTable(name = "USER_ROLES", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<User> users = new HashSet<>();;
 
     public Role(String role) {
         this.role = role;

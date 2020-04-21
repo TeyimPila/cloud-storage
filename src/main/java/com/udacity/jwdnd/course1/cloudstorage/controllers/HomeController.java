@@ -27,7 +27,6 @@ public class HomeController {
     @Autowired
     EncryptionService encryptionService;
 
-
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public ModelAndView home() {
         ModelAndView modelAndView = new ModelAndView();
