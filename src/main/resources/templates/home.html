@@ -77,7 +77,7 @@
                 </button>
 
                 <div class="table-responsive">
-                    <table class="table table-striped" id="userTable">
+                    <table class="table table-striped" id="notes-table">
                         <thead>
                         <tr>
                             <th style="width: 20%" scope="col"></th>
@@ -144,7 +144,7 @@
 
             </div>
             <div class="tab-pane fade" id="nav-credentials" role="tabpanel" aria-labelledby="nav-credentials-tab">
-                <button style="margin: 0.25em;" type="button" class="btn btn-info float-right"
+                <button style="margin: 0.25em;" type="button" class="btn btn-info float-right" id="new-credential-button"
                         onclick="showCredentialModal()">
                     + Add a New Credential
                 </button>
@@ -216,7 +216,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" onclick="$('#credentialSubmit').click();">
+                                <button type="button" id="save-credential-button" class="btn btn-primary" onclick="$('#credentialSubmit').click();">
                                     Save changes
                                 </button>
                             </div>

@@ -3,10 +3,11 @@ package com.udacity.jwdnd.course1.cloudstorage.repositories;
 import com.udacity.jwdnd.course1.cloudstorage.models.Note;
 import com.udacity.jwdnd.course1.cloudstorage.models.User;
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+@Component
 @Repository
 @Mapper
 public interface NoteRepository {
@@ -25,4 +26,7 @@ public interface NoteRepository {
 
     @Delete("DELETE FROM NOTES WHERE NOTEID = #{noteId}")
     void deleteNote(Integer noteId);
+
+    @Delete("DELETE FROM NOTES")
+    void deleteAll();
 }
