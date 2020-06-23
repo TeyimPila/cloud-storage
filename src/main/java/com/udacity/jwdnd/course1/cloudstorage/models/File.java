@@ -10,7 +10,9 @@ public class File {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer fileId;
 
+    @Column(unique = true)
     private String fileName;
+
     private String contentType;
     private Long fileSize;
 

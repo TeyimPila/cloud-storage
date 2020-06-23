@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS NOTES (
 
 CREATE TABLE IF NOT EXISTS FILES (
     fileid INT PRIMARY KEY auto_increment,
-    filename VARCHAR(1000),
+    filename VARCHAR(750) NOT NULL UNIQUE,
     contenttype VARCHAR(1000),
     filesize VARCHAR(1000),
     userid INT,
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS FILES (
 
 CREATE TABLE IF NOT EXISTS CREDENTIALS (
     credentialid INT PRIMARY KEY auto_increment,
-    url VARCHAR(100),
+    url VARCHAR(100) NOT NULL UNIQUE,
     username VARCHAR (30),
     `key` VARCHAR(1000),
     password VARCHAR(1000),
